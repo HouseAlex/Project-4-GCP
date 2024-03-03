@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Chat{% endblock %}
+
+{% block content %}
+    <h2>Chatbot</h2>
+    <div id="chatContainer">
+        <div id="chatMessages"></div>
+    
+        <!-- Chat input form with buttons -->
+        <form id="chatForm">
+            <p>Select a question:</p>
+            <button type="button" onclick="askQuestion(1, 'Does the college have a football team?')">Does the college have a football team?</button>
+            <button type="button" onclick="askQuestion(2, 'Does it have Computer Science Major?')">Does it have Computer Science Major?</button>
+            <button type="button" onclick="askQuestion(3, 'What is the in-state tuition?')">What is the in-state tuition?</button>
+            <button type="button" onclick="askQuestion(4, 'Does it have on-campus housing?')">Does it have on-campus housing?</button>
+        </form>
+    </div>
+    
+    <div id="quit">
+        <form action={{url_for('quit')}} method="get">
+            <button type="submit" value="Quit">Quit</button>
+        </form>
+    </div>
+
+    <script>
+        function askQuestion(number, question) {
+            appendMessage("You: " + question);
+
+            base = 'http://127.0.0.1:5000/'
+
+            // Send the user question to the Flask API
+            fetch(base + 'question/' + number, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                var botResponse = data.fulfillmentText;
+                console.log(botResponse)
+                appendMessage("Bot: " + botResponse);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        // Function to append a message to the chat
+        function appendMessage(message) {
+            var chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML += '<p>' + message + '</p>';
+        }
+    
+    </script>
+{% endblock %}

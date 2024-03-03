@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Info Entry{% endblock %}
+
+{% block content %}
+    <h2>Please enter some information.</h2>
+    <form action={{url_for('infoEntry')}} method="post">
+        <div>
+            <input type="text" name="firstname" placeholder="First Name" required>
+            <input type="text" name="lastname" placeholder="Last Name" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <button type="submit" value="Add Info">Add Info</button>
+        </div>
+    </form>
+{% endblock %}
